@@ -1,0 +1,32 @@
+<div class="skill-card">
+    <div class="skill-info">
+        {% if order.owner_id == session["user_id"] %}
+            <a href="{{ url_for('orders.order_detail', order_id=order.id) }}">
+        {% endif %}
+            <h2 title="{{ order.title }}">{{ order.title }}</h2>
+            <div>requested by: {{ order.customer_name }}</div>
+            {% if order.is_free %}
+                <p class="price"><strong>Price:</strong> Free</p>
+            {% else %}
+                <p class="price"><strong>Price:</strong> {{ order.price }} €</p>
+            {% endif %}
+            <p><strong>Status:</strong></p>
+            <div>
+            {% if order.is_completed and not order.rating %}
+                <p class="price"><strong>Completed</strong></p>
+                {% if order.customer_id == session["user_id"] %}
+                    <div class="skill-actions">
+                        <a href="{{ url_for('orders.review_order', order_id=order.id) }}" class="btn">Review</a>
+                    </div>
+                {% endif %}
+            {% elif order.is_completed and order.rating %}
+                <p class="price"><strong>Reviewed</strong></p>
+            {% else%}
+                <p class="price"><strong>Open</strong></p>
+            {% endif %}
+            </div>
+        {% if order.owner_id == session["user_id"] %}
+            </a>
+        {% endif %}
+    </div>
+</div>
