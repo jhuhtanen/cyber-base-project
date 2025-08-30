@@ -69,6 +69,17 @@ How to fix it: In Flask and specially using Sqlite 3 from Python's default libra
 
 
 FLAW 3:
+A01:2021 – Broken Access Control
+https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/orderss.py#L74
+Description: Broken Access Control is a type of vulnerability where person has access to functions or information they are not supposed to be granted. This means the permissions set to the user are either to permissive by default or
+by flaw in the application logic. In the example used here, a user can create a skill listing to the site which will be visible to other users. Other uses can make an order to the skill meaning they want to use a specific service by the skill owner.
+without proper checking of permissions a user can view orders that are not made to any skill they own. In the example we have SQL example querying an order which doesn't belong to a particular owner (id=1) which is then used by the web
+interface to loging and check the order they do not own.
+
+How to fix it: In this particular example this is a logic error in the code written by programmer. We already do have a function called check_order_ownership to which the order object is being passed which we can utilize to check if
+the owner of the order is actually the user logged in. In case it's not we call Flask abort function with the error code 403 (Forbidden).
+
+
 
 
 ...

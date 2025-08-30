@@ -71,7 +71,8 @@ def confirm_order(skill_id):
 def order_detail(order_id):
     order = get_order(order_id)
 
-    check_order_ownership(order)
+    # FLAW 3 FIX COMMENTED OUT
+    #check_order_ownership(order)
 
     if not order:
         return "Order not found", 404
