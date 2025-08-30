@@ -7,3 +7,5 @@ SMTP_SERVER = "localhost"
 SMTP_PORT = 8025
 
 UPLOAD_FOLDER = "static/uploads/"
+
+#SESSION_COOKIE_HTTPONLY = True

@@ -1,4 +1,4 @@
-This essay covers 5 cyber security flaws listed in the OWASP 2021 list [1]
+This essay covers 5 cybersecurity flaws listed in the OWASP 2021 list [1]
 
 
 LINK: https://github.com/jhuhtanen/cyber-base-project
@@ -94,9 +94,15 @@ to the functionality being exactly the same but being more secure.
 
 
 FLAW 5:
-exact source link pinpointing flaw 5...
-description of flaw 5...
-how to fix it...
+A05:2021 – Security Misconfiguration
+https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/__init__.py#L13
+Description: This flaw is mainly about configuration of security. Here in the example we have used a development value which in many cases can even be something you find in the application
+documentation. Flask builds the session by having a secret key and this is passed for the app in the initialisation. The default value never should be used in production and it should be secure, hence the example "dev" is way too simple
+and possibly a default many would use.
+
+How to fix it: In production the key should be read from OS value. It shouldn't be put in the source control. The value also should be long and secure enough. A secure token can be generated for instance with
+pythons secrets library. In the screenshots there's no actual screenshot of after because the proper session id while could be potentially fraudulent the same way but it would be much much more difficult to create.
+NOTE: CSFR would still prevent usage of the fraudulent session cookie as the csfr value wouldn't match.
 
 
 References:
