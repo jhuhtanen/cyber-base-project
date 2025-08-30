@@ -3,6 +3,7 @@ import re
 import secrets
 import time
 from functools import wraps
+import random
 from sys import stderr
 
 from flask import Blueprint, render_template, request, session, \
@@ -26,12 +27,22 @@ def get_user(username):
 
 
 def get_user_by_reset_token(token):
-    hashed_token = hashlib.sha256(token.encode()).hexdigest()
+    hashed_token = hashlib.md5(token.encode()).hexdigest()
     sql = "SELECT u.id " \
           "FROM users u, password_reset_token t " \
           "WHERE t.reset_token = ? AND t.reset_expiry >= ? AND u.username = t.email"
     result = db.query(sql, [hashed_token, int(time.time())])
     return result[0] if result else None
+
+
+# FLAW 4 FIX COMMENTED OUT
+'''def get_user_by_reset_token(token):
+    hashed_token = hashlib.sha256(token.encode()).hexdigest()
+    sql = "SELECT u.id " \
+          "FROM users u, password_reset_token t " \
+          "WHERE t.reset_token = ? AND t.reset_expiry >= ? AND u.username = t.email"
+    result = db.query(sql, [hashed_token, int(time.time())])
+    return result[0] if result else None'''
 
 
 def create_new_user(username, password):
@@ -71,11 +82,19 @@ def do_login(username, password):
 
 
 def generate_reset_token():
+    token = str(random.randint(100000, 101000))  # 4-digit token
+    hashed_token = hashlib.md5(token.encode()).hexdigest()
+    expiry = int(time.time()) + current_app.config["RESET_TOKEN_VALIDITY_SECONDS"]
+    return token, hashed_token, expiry
+
+
+# FLAW 4 FIX COMMENTED OUT
+'''def generate_reset_token():
     token = secrets.token_urlsafe(32)
     hashed_token = hashlib.sha256(token.encode()).hexdigest()
     expiry = int(time.time()) + current_app.config["RESET_TOKEN_VALIDITY_SECONDS"]
 
-    return token, hashed_token, expiry
+    return token, hashed_token, expiry'''
 
 
 def update_token(hashed_token, expiry, email):

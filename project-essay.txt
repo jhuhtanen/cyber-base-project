@@ -70,7 +70,7 @@ How to fix it: In Flask and specially using Sqlite 3 from Python's default libra
 
 FLAW 3:
 A01:2021 – Broken Access Control
-https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/orderss.py#L74
+https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/orders.py#L74
 Description: Broken Access Control is a type of vulnerability where person has access to functions or information they are not supposed to be granted. This means the permissions set to the user are either to permissive by default or
 by flaw in the application logic. In the example used here, a user can create a skill listing to the site which will be visible to other users. Other uses can make an order to the skill meaning they want to use a specific service by the skill owner.
 without proper checking of permissions a user can view orders that are not made to any skill they own. In the example we have SQL example querying an order which doesn't belong to a particular owner (id=1) which is then used by the web
@@ -80,9 +80,18 @@ How to fix it: In this particular example this is a logic error in the code writ
 the owner of the order is actually the user logged in. In case it's not we call Flask abort function with the error code 403 (Forbidden).
 
 
+FLAW 4:
+A02:2021 – Cryptographic Failures
+https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/auth.py#L84
+Description: This vulnerability contains multiple sub topics. One of them is usage of broken or risky cryptographic algorithm. In this example we already have a password reset functionality, so we use that. In the vulnerable version there's couple of
+things done as demonstration. Firstly we have used MD5 hash which is old and isn't secure. Secondly the generation of secrets is poorly chosen and used a random number. For demonstration purposes the range is capped for 4 digit because the
+exploit would take longer to break or would be more complex to showcase. There's python code in csfr-website folder called "brute-force-hash.py" that essentially bombards the server and finds the reset token. This way the attacker can change
+the password for a user (by guessing a username which is email) and then take over the account. Another way of this being more realistic would be that the user database with poor hashes would be leaked and it would take little
+to no effort to use the local copy and check the hashes.
 
+How to fix it: We use most updated and secure cryptographic libraries, e.g. sha256. And instead of poor secret randomisation we utilize secrets python library and use e.g 32 character long input. There is no after screenshot due
+to the functionality being exactly the same but being more secure.
 
-...
 
 FLAW 5:
 exact source link pinpointing flaw 5...
