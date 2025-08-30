@@ -29,6 +29,13 @@ def execute(sql, params=None):
     g.last_insert_id = result.lastrowid
 
 
+def executescript(sql):
+    con = get_connection()
+    result = con.executescript(sql)
+    con.commit()
+    g.last_insert_id = result.lastrowid
+
+
 def last_insert_id():
     return g.last_insert_id
 

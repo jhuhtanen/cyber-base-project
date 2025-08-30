@@ -193,11 +193,17 @@ def get_orders_count_made_to_user(user_id):
 
 def create_order(skill_id, customer_id, additional_commentary):
     today_str = get_time_now_formatted()
+    sql = f"""INSERT INTO orders
+                (skill_id, customer_id, is_completed, order_placed, additional_information)
+                VALUES({skill_id}, {customer_id}, 0, '{today_str}', '{additional_commentary}'"""
+    db.executescript(sql)
+    ''' FLAW 2 FIX COMMENTED OUT
+    today_str = get_time_now_formatted()
     sql = """INSERT INTO orders
             (skill_id, customer_id, is_completed, order_placed, additional_information)
             VALUES (?, ?, ?, ?, ?)"""
     db.execute(sql,
-            [skill_id, customer_id, 0, today_str, additional_commentary])
+            [skill_id, customer_id, 0, today_str, additional_commentary])'''
 
 
 def get_order(order_id):

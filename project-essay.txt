@@ -1,0 +1,83 @@
+This essay covers 5 cyber security flaws listed in the OWASP 2021 list [1]
+
+
+LINK: https://github.com/jhuhtanen/cyber-base-project
+
+### Installation instructions:
+
+* git clone https://github.com/jhuhtanen/cyber-base-project.git
+* Go to newly created folder: cd cyber-base-project
+
+### Create virtual environment:
+* Create and activate a virtual environment by running: python -m venv venv
+* Activate the virtual environment: source venv/bin/activate .On Windows use `venv\Scripts\activate`
+
+### Install dependencies:
+* pip install flask
+
+### Initialize the database by running:
+* flask --app flaskr init-db
+* OR
+* init-db.sh on git-bash 
+
+### Creating mock data (OPTIONAL):
+* flask --app flaskr create-mock-data
+* OR
+* fill-mock-data-db.sh on git-bash
+
+### Make sure application has valid config
+* Copy the config.py -file from flaskr folder to instance folder.
+
+NOTE: In order for the app to work the config.py from project root needs to be copied to instance folder.
+This is due to the fact that instance folder shouldn't be in source control and config in production use is
+instance data. But for this scope of project we can use the one config that is in source control and under the root.
+
+In case you see errors like current_app.config["KEY_NAME"] with KeyError it's very likely that config.py was not copied
+under instance folder.
+
+### Run the application:
+
+* python app.py 
+* OR
+* run.sh on git-bash
+* Open http://127.0.0.1:5000/ in a web browser.
+
+
+FLAW 1:
+CSFR
+https://github.com/jhuhtanen/cyber-base-project/blob/develop/flaskr/skills.py#L72
+Description: CSFR or Cross Site Forgery allows exploiter to act as authenticated user in the website that doesn't block CSFR on the victim's behalf.
+Victim needs to be authenticated to the web site and malicious attack can be initated by attacker by sending en email to the victim which in turn
+uses GET / POST for the target web application without the victim knowing they are performing an action on the website.
+
+Another mechanism could be a link to attacker's website which looks legit. E.g. Asking visitor to participate a sweepstake with tempting prices but instead of
+victim thinking they take part, the action is directed toward a web site not handling the CSFR.
+
+How to fix it: In Flask CSFR can be prevented by using csfr_token already created by the server for the Http Session and adding the field as part of the GET/ POST
+handling. When token has been added as input that gets passed to the server as part of the request and then server needs to check the value against the value in the session.
+In case there's a mismatch Flask offers an abort(ERROR_CORE) function to raise an Http error, e.g. 403 (Forbidden) 
+
+In this particular example we have built a function that checks the existence of the csfr_token with function check_csrf() and we uncomment it to be part of the execution flow.
+
+FLAW 2:
+A03:2021 – Injection
+exact source link pinpointing flaw 2...
+Description: Injection is a type of attack against vulnerability where user input isn't validated against the rules applicable for the web site. In this example we use SQL Injection.
+SQL Injection allows user to bake SQL commands as part of their input causing unwanted SQL to be executed on the server side. This potentially can lead to exposing of passwords / credentials or dumping of the database among many other malicious consequences.
+
+How to fix it: In Flask and specially using Sqlite 3 from Python's default library already allows parametrised queries. Parametrised queries use question marks (?) as placeholders for the user input and inputs are passed as special list of parameters to the execute SQL function. Using parametrised queries the data and input are separated and making it impossible to alter the query itself. If the user tries to include part of SQL as one of the input parameters, let's say NAME field in the database, the value of the NAME field will then contain the attempt to inject SQL code as long as there is no other validation for the input. 
+
+
+FLAW 3:
+
+
+...
+
+FLAW 5:
+exact source link pinpointing flaw 5...
+description of flaw 5...
+how to fix it...
+
+
+References:
+[1] https://owasp.org/www-project-top-ten/

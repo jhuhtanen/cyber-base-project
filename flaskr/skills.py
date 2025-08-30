@@ -69,7 +69,8 @@ def create_skill():
         skill_form.subcategory = request.args.get("subcategory", None)
 
     if request.method == "POST":
-        check_csrf()
+        # FLAW 1 FIX COMMENTED OUT
+        #check_csrf()
         user_id = session["user_id"]
         has_errors = skill_form.validate()
 

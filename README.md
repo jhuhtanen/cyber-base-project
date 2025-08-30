@@ -71,8 +71,8 @@ and a rating for the completed order.
 
 ### Clone the repository:
 
-* git clone https://github.com/jhuhtanen/tikawe-skillr.git
-* Go to newly created folder: cd tikawe-skillr
+* git clone https://github.com/jhuhtanen/cyber-base-project.git
+* Go to newly created folder: cd cyber-base-project
 
 ### Create virtual environment:
 * Create and activate a virtual environment by running: python -m venv venv
