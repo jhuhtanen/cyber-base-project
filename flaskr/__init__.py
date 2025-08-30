@@ -14,6 +14,13 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'skillr.sqlite'),
     )
 
+    # FLAW 5 FIX COMMENTED OUT
+    '''app.config.from_mapping(
+        SECRET_KEY=os.getenv('SECRET_KEY', os.urandom(32)),
+        DATABASE=os.path.join(app.instance_path, 'skillr.sqlite'),
+    )'''
+
+
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:
